@@ -1,0 +1,101 @@
+---
+title: "Data606_Lab3"
+author: "Femi Adesanya"
+date: "March 4, 2018"
+output: html_document
+---
+
+
+###### In this lab we'll investigate the probability distribution that is most central to statistics: the normal distribution. If we are confident that our data are nearly normal, that opens the door to many powerful statistical methods. Here we'll use the graphical tools of R to assess the normality of our data and also learn how to generate random numbers from a normal distribution.
+
+
+###### Import data from openintro site
+```{r}
+download.file("http://www.openintro.org/stat/data/bdims.RData", destfile = "bdims.RData")
+load("bdims.RData")
+```
+
+
+```{r}
+mdims <- subset(bdims, sex == 1)
+fdims <- subset(bdims, sex == 0)
+```
+
+```{r}
+fhgtmean <- mean(fdims$hgt)
+fhgtsd   <- sd(fdims$hgt)
+```
+
+```{r}
+hist(fdims$hgt, probability = TRUE)
+x <- 140:190
+y <- dnorm(x = x, mean = fhgtmean, sd = fhgtsd)
+lines(x = x, y = y, col = "blue")
+```
+
+
+
+```{r}
+qqnorm(fdims$hgt)
+qqline(fdims$hgt)
+```
+
+```{r}
+sim_norm <- rnorm(n = length(fdims$hgt), mean = fhgtmean, sd = fhgtsd)
+```
+
+```{r}
+qqnormsim(fdims$hgt)
+```
+
+
+
+```{r}
+1 - pnorm(q = 182, mean = fhgtmean, sd = fhgtsd)
+```
+
+```{r}
+sum(fdims$hgt > 182) / length(fdims$hgt)
+```
+
+
+
+```{r}
+head(bdims)
+```
+
+
+###### Question 1
+Now let's consider some of the other variables in the body dimensions data set. Using the figures linked here, match the histogram to its normal probability plot. All of the variables have been standardized (first subtract the mean, then divide by the standard deviation), so the units won't be of any help. While unnecessary for this assignment, if you are uncertain based on these figures, generate the plots in R to check.
+
+The histogram for female biiliac (pelvic) diameter (bii.di) belongs to normal probability plot letter _B___.
+The histogram for female elbow diameter (elb.di) belongs to normal probability plot letter __C__.
+The histogram for general age (age) belongs to normal probability plot letter __D__.
+The histogram for female chest depth (che.de) belongs to normal probability plot letter _A___.
+
+
+
+
+######Question 2
+Note that normal probability plots C and D have a slight stepwise pattern.
+Why do you think this is the case?
+
+###### Ans : Many repeated values.stepwise probalility plot patterns are usually produced by discrete variables such as age
+
+
+
+###### Question 3
+
+As you can see, normal probability plots can be used both to assess normality and visualize skewness. Make a normal probability plot for female knee diameter (kne.di). Based on this normal probability plot, is this variable left skewed, symmetric, or right skewed? Use a histogram to confirm your findings.
+
+
+Ans: The variable kne.di is right-skewed and its qq-plot is convex (the ends point up).
+
+```{r}
+qqnormsim(fdims$kne.di)
+```
+
+```{r}
+
+```
+
