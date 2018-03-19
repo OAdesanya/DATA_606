@@ -1,0 +1,61 @@
+---
+title: "DatA606_Lab4b"
+author: "Femi Adesanya"
+date: "March 18, 2018"
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r}
+download.file("http://www.openintro.org/stat/data/ames.RData", destfile = "ames.RData")
+load("ames.RData")
+population <- ames$Gr.Liv.Area
+```
+
+
+##### 1. Using the following function (which was downloaded with the data set), plot all intervals. What proportion of your confidence intervals include the true population mean? Is this proportion exactly equal to the confidence level? If not, explain why.
+```{r}
+#plot_ci(lower, upper, mean(population))
+
+###ANS: 94% of the confidence intervals include true population mean. This is very close to the confidence level selected but not exactly same. The confidence level is a good approximate measure but not a perfect calculation
+```
+
+
+##### 2. Pick a confidence level of your choosing, provided it is not 95%. What is the appropriate critical value?
+```{r}
+###I will pick 90% confidence level. using signifiance level 1- a/2 = 1 - 0.10/2 = 0.95.
+
+Z <- qnorm(.95)
+Z
+```
+
+```{r}
+set.seed(60)
+samp <- sample(population, 60)
+summary(samp)
+```
+
+##### 3. Calculate 50 confidence intervals at the confidence level you chose in the previous question. You do not need to obtain new samples, simply calculate new intervals based on the sample means and standard deviations you have already collected. Using the plot_ci function, plot all intervals and calculate the proportion of intervals that include the true population mean. How does this percentage compare to the confidence level selected for the intervals?
+```{r}
+samp_mean <- rep(NA, 50)
+samp_sd <- rep(NA, 50)
+n <- 60
+for(i in 1:50){
+samp <- sample(population, n)
+samp_mean[i] <- mean(samp)
+samp_sd[i] <- sd(samp)
+}
+lower <- samp_mean - 1.65 * samp_sd / sqrt(n)
+upper <- samp_mean + 1.65 * samp_sd / sqrt(n)
+c(lower[1],upper[1])
+```
+
+```{r}
+plot_ci(lower, upper, mean(population))
+```
+
+```{r}
+prop <- 1-(4/50)
+prop
+```
+
